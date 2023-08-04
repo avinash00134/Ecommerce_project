@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bs5/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'bs5/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-orange.css">
+
+</head>
+<style>
+    .login_page{
+        margin-right:14% ;
+        margin-top: 10%;
+        background-color:rgb(23, 252, 221);
+        padding: 5%;
+        padding-bottom: 4%;
+        border-radius: 7%;
+    }
+    body{
+      background-color:#abd25d;
+    }
+    .table-bordered{
+      border: rgb(23, 252, 221);
+    }
+    #login_submit_button{
+      margin-left: 40%;
+      margin-top: 2%;
+    }
+    .rs{
+      margin-top: 4.5%;
+      color: rgb(81, 87, 82);
+    }
+    button.social-signin {
+      margin-left: 1.8%;
+      margin-bottom: 20px;
+      width: 170px;
+      height: 36px;
+      border: none;
+      border-radius: 20px;
+      color: #FFF;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    button.social-signin.facebook {
+      background: #32508E;
+    }
+
+    button.social-signin.google {
+      background: #DD4B39;
+    }
+    #lr{
+      text-decoration: none;
+      margin-left: 2%;
+      color:red;
+    }
+</style>
+<body>
+  <style>
+    #cart-total{
+  display: block;
+  text-align: center;
+  color:#fff;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  }
+  #cs{
+    margin-left: 670px;
+  }
+  </style>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark w3-green">
+      <div class="container">
+        <a class="navbar-brand" href="/">CodeMarket</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/">Hello {{request.user}}</a>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link w3-hover-blue" href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a id="cs" class="nav-link w3-hover-blue" href="{% url 'seller_register' %}">Become a Seller</a>
+            <a class="nav-link w3-hover-blue" href="{% url 'customer_register' %}">Register</a>
+            <a class="nav-link w3-hover-blue" href="{% url 'login' %}">Login</a>
+          {% endif %}
+            <a href="">
+              <img  id="cart-icon" src="{% static 'cart.png' %}" width="30px" height="35px">
+          </a>
+          <p id="cart-total">0</p>
+          </div>
+        </div>
+      </div>
+  </nav>
+    
+    <div style="float: left;">
+      <img style="margin-top: -2px;" src="{% static 'registerbg.png' %}" height="912px" width="100%" alt="Not Found"/>
+    </div>
+    <div style="float: right;" class="login_page">
+        <h1 style="margin-left: 36%;" class="my-4">Login</h1>
+        {% if msg %}
+          <p class="text-success">{{msg}}</p>
+        {% endif %}
+        <form class="ml-2" method="POST" action="">
+            <table class="table table-bordered">
+                {% csrf_token %}
+                <!-- {{form.as_table}} -->
+                <tr>
+                  <th>
+                    <label class="rs">Username:</label>
+                  </th>
+                  <td>
+                    <input type="text" name="username" class="form-control" autofocus required placeholder="Username">
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    <label class="rs">Password:</label>
+                  </th>
+                  <td>
+                    <input type="password" name="password" class="form-control" autofocus required placeholder="Password">
+                  </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" id="login_submit_button" value="Submit" class="btn btn-success"/></td>
+                </tr>
+            </table>
+        </form>
+          <h4 style="margin-left: 45%;">OR</h4>
+          <a href="{% url 'social:begin' 'google-oauth2' %}"><button class="social-signin google">Log in with Google+</button></a>
+          <button class="social-signin facebook">Log in with facebook</button>
+          <h6 style="color: black;font-weight: 1000;margin-left: 25%;">Don't Have Account?<a id='lr' href="{% url 'customer_register' %}">Register</a></h6>
+    </div>
+    </body>
+</html>

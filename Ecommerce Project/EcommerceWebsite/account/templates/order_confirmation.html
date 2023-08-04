@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Order Confirmation
+{% endblock %}
+{% block cart %}
+{{Carts.count}}
+{% endblock %}  
+{% block content %}
+<br>
+<h1 style="margin-left: 25%;color: rgb(15, 243, 15);">Your Order has Successfully Done</h1>
+{% endblock %}

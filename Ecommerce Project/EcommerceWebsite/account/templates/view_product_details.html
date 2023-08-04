@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Product Detail
+{% endblock %}
+{% block cart %}
+{% if request.user.is_authenticated %}
+    {{carts.count}}
+{% else %}
+0
+{% endif %}
+{% endblock %}  
+{% block content %}
+{% for i in product %}
+<div style="float: left;margin-top: 100px;width: 400px;margin-left: 5%;height: 600px;">
+  <div class="carousel-item active">
+    <img style="padding: 12px;background-color: rgb(247, 247, 240);" src="{{i.image.url}}" height="400px" class="card-img-top" alt="Category Title">
+    {% if i.stock is 0 %}
+    <h5 class="card-title" style="color:red;margin-left:5px;text-align: left;">Currently Unavailable </h5>
+    {% else %}
+    <h5 class="card-title" style="color:red;margin-left:5px;text-align: left;">Hurry up only {{i.stock}} left !</h5>
+    {% endif %}
+    <h3 style="margin-left: 40%;margin-top: 5%;"><b>${{i.price}}</b></h3>
+    {% if user.is_customer %}
+    <h5 class="card-title" style="text-align: center;"><a href="{% url 'add_to_cart' i.id %}"  class="btn btn-success">Add to Cart</a></h5>
+    {% else %}
+    <h5 class="card-title" style="text-align: center;"><a href=""  class="btn btn-success">Add to Cart</a></h5>
+    {% endif %}    
+  </div>
+</div>
+<div style="float: right;height: 600px;margin-top: 120px;width: 62%;">
+  <div>
+    <h5>
+      <b>Price:</b> ${{i.price}}
+    </h5>
+    <h5>
+      <b>Seller: </b><span style="color: rgb(168, 162, 162);">{{i.user}}</span>
+    </h5>
+    <h5>
+      <b>Category:</b> {{i.category}}
+    </h5>
+    <h5>
+      <b>Name: </b>{{i.name}}
+    </h5>
+    <h5>
+      <b>Description:</b>
+    </h5>
+    <h5 style="margin-left: 2%;">
+      {{i.description}}
+    </h5>
+    <h5 style="margin-top: 4%;">
+      {% if i.stock is 0 %}
+      <b style="color: red;">Out of Stock</b>
+      {% else %}
+      <b style="color:rgb(5, 247, 5)">Stock: </b>{{i.stock}}
+      {% endif %}
+    </h5>
+
+
+  </div>
+</div>
+{% endfor %}
+
+{% if find is None %}
+<div style="margin-left: 45%;width: 120px;">
+  {% for i in product %}
+    {% for j in i.tags.all %}
+    <a style="font-size: small;" href="{% url 'posts_by_tag' i.id j.slug %}" class="btn btn-primary">View Similar Product</a>
+    {% endfor %}
+  {% endfor %}
+</div>
+{% else %}
+<h3>Similar Product :</h3>
+<hr style="border:solid green 3px;height:0px;">
+<br>
+
+<div class="row">
+    {% for i in similar %}
+    <div class="col-md-3">
+        <div style="border: solid 2px green;" class="card">
+            <a href="#"><img style="padding: 12px;" src="{{i.image.url}}" height="320px" class="card-img-top" alt="Category Title"></a>
+            <div class="card-body">
+                <h5 class="card-title" style="color:grey;text-align: center;">{{i.category}}</h5>
+                <h5 class="card-title" style="color:black;text-align: center;">{{i.name}}</h5>              
+                <h5 class="card-title" style="text-align: center;">${{i.price}}</h5>
+                {% if user.is_customer %}
+                <h5 class="card-title" style="text-align: center;"><a href="{% url 'add_to_cart' i.id %}"  class="btn btn-success">Add to Cart</a></h5>
+                {% else %}
+                <h5 class="card-title" style="text-align: center;"><a href=""  class="btn btn-success">Add to Cart</a></h5>
+                {% endif %}
+                <h5 class="card-title" style="text-align: center;"><a style="color: blue;" href="{% url 'view_product_detail' i.id %}">view</a></h5>
+                {% if i.stock == 0 %}
+                <h5 class="card-title" style="color:red;margin-left:5px;text-align: left;"><b>Out of Stock</b></h5>
+                {% else %}
+                <h5 class="card-title" style="color:red;margin-left:5px;text-align: left;">Hurry up only {{i.stock}} left !</h5>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+    </div>
+    <!-- <div>
+      {% for j in i.tags.all %}
+        <h2>{{ j }} </h2>
+        <a href="{% url 'posts_by_tag' i.id j.slug %}">{{j.name}}</a>
+      {% endfor %}
+    </div> -->
+    <!-- <div>
+      {% for j in tags.all %}
+        <h2>{{ j }} </h2>
+      {% endfor %}
+    </div> -->
+    {% endfor %}
+
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Your Cart
+{% endblock %}
+{% block cart %}
+{{Carts.count}}
+{% endblock %}  
+{% block content %}
+
+<div style="background-color: rgba(255, 166, 0, 0.637);padding: 1%;margin-top: 1%;">
+    <img src="{% static 'cart2.png' %}" height="200px" width="200px" alt="Category Title">
+    <h1 style="margin-top: 5%;margin-right: 450px;float: right;">Your Shopping Cart</h1>
+</div>
+<br>
+<div>
+    {% if total == 0 %}
+    <div style="background-color: rgb(18, 238, 10);height: 100px;">
+        <h2 style="padding-left: 40%;padding-top: 2.5%;color: red;">Your Cart is Empty</h2>
+    </div>
+    {% else %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width:250px;text-align: center;">Product</th>
+                <th style="width:250px;text-align: center;">Product Name</th>
+                <th style="width:270px;text-align: center;">Quantity</th>
+                <th style="width:270px;text-align: center;">Price</th>
+                <th style="width:270px;text-align: center;">Total</th>
+                <th style="width:270px;text-align: center;">Remove</th>
+            </tr>
+        </thead>
+        {% for i in Carts %}
+        <tbody>
+            <td><a href="#"><img style="padding: 10%;" src="{{i.image.url}}" height="200px" width="200px" alt="Category Title"></a></td>
+            <td style="text-align: center;padding-top: 7%;">{{i.name}}</td>
+            <td style="text-align: center;padding-top: 7%;">
+                <a href="{% url 'subtract_quantity' i.id %}"><img src="{% static 'subtract.png' %}" height="25px" width="28px" alt="Not Found minus"></a>
+                <span style="border: solid 1px black;padding: 5px;color: red;">{{i.quantity}}</span>
+                <a href="{% url 'add_quantity' i.id %}"><img style="padding-bottom: 1%;" src="{% static 'add.png' %}" height="30px" width="35px" alt="Not Found add"></a>
+            </td>
+            <td style="text-align: center;padding-top: 7%;">{{i.price}}</td>
+            <td style="text-align: center;padding-top: 7%;">{{i.total}}</td>
+            <td><a href="{% url 'delete_product_cart' i.id %}"><img style="margin-left: 44%;margin-top: 42%;" src="{% static 'wrong.png' %}" height="20px" width="20px" alt="Category Title"></a></td>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+<hr style="border:solid green 2px;height:0px;">
+<br>
+  <div style="font-family: 'Montserrat', sans-serif;background-color: #fff;border-radius: 7px;padding: 1rem;" class="card border-0 shadow-lg">
+    <div style="border-bottom: none;padding-bottom: 0;" class="card-header bg-white text-center">
+      <h4 class="mb-0">Cart Summary</h4>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title mb-4 text-muted">Items: <span id="item-count">{{Carts.count}}</span></h5>
+      <h5 class="card-title mb-5 text-muted">Total Price: $<span id="total-price">{{total}}</span></h5>
+      {% if total is 0 %}
+        <a href="" class="btn btn-primary btn-block checkout-btn">Checkout Now</a>
+      {% else %}
+      <a href="{% url 'checkout' %}" class="btn btn-primary btn-block checkout-btn">Checkout Now</a>
+      {% endif %}
+    </div>
+  </div>
+  <br>
+{% endblock %}

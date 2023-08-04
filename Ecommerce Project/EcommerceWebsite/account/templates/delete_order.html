@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Product Deleted{% endblock %}
+{% block cart %}
+0
+{% endblock %}
+{% block content %}
+{% if user.is_seller %}
+<h1>Are you sure you want to delete the following:</h1>
+<p>{{ object.order_number }}</p>
+
+<form method="POST" >{% csrf_token %}
+    <button class="btn btn-danger">yes, delete</button>
+</form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Payment
+{% endblock %}
+{% block cart %}
+{{carts.count}}
+{% endblock %}  
+{% block content %}
+<br>
+    <div>
+        <div style="border: solid 2px rgb(230, 148, 25);border-radius: 10%;float:left;width: 44%;" id = card>
+            <div class="card">
+                <div class="card-header">
+                    Delivery Details
+                </div>
+                <div class="card-body">
+                  <form class="ml-2" method="POST" action="">
+                    <table class="table table-borderless">
+                        {% csrf_token %}
+                        <tr>
+                            <td>
+                                <label>Name</label>
+                                <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{fname}} {{lname}}</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">
+                            <label>Address</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{address}}</h1>
+                          </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Mobile Number</label>
+                                <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{mobilenumber}}</h1>
+                            </td>
+                          <td>
+                            <label>Email</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{email}}</h1>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>Country</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{country}}</h1>
+                          </td>
+                          <td>
+                            <label>State</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{state}}</h1>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>City</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{city}}</h1>
+                          </td>
+                          <td>
+                            <label>Pincode</label>
+                            <h1 style="border: solid 2px rgb(8, 15, 25);" class="form-control" autofocus>{{pincode}}</h1>
+                          </td>
+                        </tr>
+                    </table>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div style="border: solid 2px rgb(230, 148, 25);border-radius: 10%;float:right;width: 43%;" id = card>         
+            <div class="card">
+                <div class="card-header">
+                    Order Summary
+                </div>   
+                <div class="card-body">
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Product</th>
+                                    <th style="text-align: center;">Product Name</th>
+                                    <th style="text-align: center;">Quantity</th>
+                                    <th style="text-align: center;">Price</th>
+                                    <th style="text-align: center;">Total</th>
+                                </tr>
+                            </thead>
+                            {% for i in carts %}
+                            <tbody>
+                                <td><a href="#"><img style="padding: 10%;" src="{{i.image.url}}" height="80px" width="80px" alt="Category Title"></a></td>
+                                <td style="text-align: center;padding-top: 7%;">{{i.name}}</td>
+                                <td style="text-align: center;padding-top: 7%;">{{i.quantity}}</td>
+                                <td style="text-align: center;padding-top: 7%;">${{i.price}}</td>
+                                <td style="text-align: center;padding-top: 7%;">${{i.total}}</td>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                <h5 class="card-title">Product Details</h5>
+                <hr style="border:solid 1px black">
+                <h6 style="margin-right: 12.5%;" class="card-subtitle mb-2 text-muted">Price <b>({{carts.count}} items)</b> <span style="float:right">${{total}}</span></h6> 
+                <h6 style="margin-right: 13.4%;margin-top: 1%;" class="card-subtitle mb-2 text-muted">Delivery Charges <span style="color:rgb(21, 226, 21);float:right">Free</span></h6> 
+                <hr style="border:solid 1px black;">
+                <h6 style="font-weight: bold;" class="card-subtitle mb-2">Total Price <span style="float:right;margin-right: 11.5%;">${{total}}</span></h6>
+                  
+                <script src="https://www.paypal.com/sdk/js?client-id=AR4S4gf3zQJxXbEs0r7R-WyMpD7SRDneU7jXvID3fKFbBvgm8-4t5FIXcDo67gcYkXTIXmWlnDUgSg0a&currency=USD"></script>
+
+                <!-- Set up a container element for the button -->
+
+                <div id="paypal-button-container"></div>
+
+                <script>
+
+                  paypal.Buttons({
+
+                    createOrder: function(data,actions) {
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            value: '{{total}}'
+                          }
+                        }]
+                      });
+                    },
+
+                    onApprove: function(data,actions) {
+                      return actions.order.capture().then(function(details) {
+                        data = {'first_name':"{{fname}}",'lastname':"{{lname}}",'address':"{{address}}",'mobilenumber':"{{mobilenumber}}",'country':"{{country}}",'state':"{{state}}",'city':"{{city}}",'pincode':"{{pincode}}"}
+                        console.log(data)
+                        first_name = "{{fname}}".toString()
+                        data=details.id
+                        alert('Transaction completed by ' + details.payer.name.given_name + ' and transaction id: ' + details.id +'!')
+                        window.location.href= "{% url 'order_confirm' 'success' %}"
+
+                      });
+                    }
+                  }).render('#paypal-button-container');
+
+                </script>              
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

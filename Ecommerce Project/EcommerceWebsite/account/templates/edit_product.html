@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Product Edited {% endblock %}
+{% block cart %}
+0
+{% endblock %}
+{% block content %}
+    {% if user.is_seller %}
+    <div class="container my-4" >
+        <h3 class="my-4">Product Updated</h3>
+        <form method="POST" action="" enctype = "multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                {% csrf_token %}
+                {{form.as_table}}
+                <tr>
+                    <td colspan="2"><input type="submit" value="Submit" class="btn btn-primary"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}

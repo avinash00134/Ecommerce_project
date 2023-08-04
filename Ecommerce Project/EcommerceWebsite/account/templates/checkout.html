@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block cart %}
+{{carts.count}}
+{% endblock %}  
+{% block content %}
+<br>
+    <div>
+        <div style="border: solid 2px rgb(230, 148, 25);border-radius: 10%;float:left;width: 44%;" id = card>
+            <div class="card">
+                <div class="card-header">
+                    Delivery Details
+                </div>
+                <div class="card-body">
+                <form class="ml-2" method="POST" action="">
+                    <table class="table table-borderless">
+                        {% csrf_token %}
+                        <tr>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="first_name" class="form-control" autofocus required placeholder="Firstname">
+                          </td>
+                            <td>
+                              <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="last_name" class="form-control" autofocus required placeholder="Lastname">
+                            </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="address" class="form-control" autofocus required placeholder="Address">
+                          </td>
+                        </tr>
+                        <tr>
+                            <td>
+                              <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="mobilenumber" class="form-control" maxlength="10" autofocus required placeholder="mobilenumber">
+                            </td>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="email" name="email" class="form-control" autofocus required placeholder="Email">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="country" class="form-control" autofocus required placeholder="Country">
+                          </td>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="state" class="form-control" autofocus required placeholder="State">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="text" name="city" class="form-control" autofocus required placeholder="City">
+                          </td>
+                          <td>
+                            <input style="border: solid 2px rgb(8, 15, 25);" type="number" name="pincode" class="form-control" autofocus required placeholder="Pincode">
+                          </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr style="border:solid green 1px;height:0px;"><input style="float: right;margin-right: 2%;" type="submit" name="continue" id="register_submit_button" value="Continue" class="btn btn-warning"/></td>
+                        </tr>
+                    </table>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div style="border: solid 2px rgb(230, 148, 25);border-radius: 10%;float:right;width: 43%;" id = card>         
+            <div class="card">
+                <div class="card-header">
+                    Order Summary
+                </div>   
+                <div class="card-body">
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Product</th>
+                                    <th style="text-align: center;">Product Name</th>
+                                    <th style="text-align: center;">Quantity</th>
+                                    <th style="text-align: center;">Price</th>
+                                    <th style="text-align: center;">Total</th>
+                                </tr>
+                            </thead>
+                            {% for i in carts %}
+                            <tbody>
+                                <td><a href="#"><img style="padding: 10%;" src="{{i.image.url}}" height="80px" width="80px" alt="Category Title"></a></td>
+                                <td style="text-align: center;padding-top: 7%;">{{i.name}}</td>
+                                <td style="text-align: center;padding-top: 7%;">{{i.quantity}}</td>
+                                <td style="text-align: center;padding-top: 7%;">${{i.price}}</td>
+                                <td style="text-align: center;padding-top: 7%;">${{i.total}}</td>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                <h5 class="card-title">Product Details</h5>
+                <hr style="border:solid 1px black">
+                <h6 style="margin-right: 12.5%;" class="card-subtitle mb-2 text-muted">Price <b>({{carts.count}} items)</b> <span style="float:right">${{total}}</span></h6> 
+                <h6 style="margin-right: 13.4%;margin-top: 1%;" class="card-subtitle mb-2 text-muted">Delivery Charges <span style="color:rgb(21, 226, 21);float:right">Free</span></h6> 
+                <hr style="border:solid 1px black;">
+                <h6 style="font-weight: bold;" class="card-subtitle mb-2">Total Price <span style="float:right;margin-right: 11.5%;">${{total}}</span></h6>
+              
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

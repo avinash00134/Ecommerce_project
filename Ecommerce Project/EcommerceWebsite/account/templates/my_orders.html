@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block cart %}
+{{carts.count}}
+{% endblock %}  
+{% block content %}
+<br>
+<div>
+    <div style="float:right;width: 100%;" id = card>         
+        <div class="card">
+            <div class="card-header">
+                My Orders
+            </div>   
+            <div class="card-body">
+                <div style="height: 30px;">
+                    <h4 style="margin-left: 5%;float: left;">Order ID</h4>
+                    <h4 style="margin-left: 9%;float: left;">Customer Name</h4>
+                    <h4 style="margin-left: 9%;float: left;">Order Detail </h4>
+                    <h4 style="margin-left: 9%;float: left;">Price</h4>
+                    <h4 style="margin-left: 7%;float: left;">Order Status</h4>
+                    <h4 style="margin-right: 5%;float: right;">Cancel Order</h4>
+                    
+                </div>
+            </div>
+            {% for i in orders %}
+            <div>
+                <hr style="border:solid 1px black">
+                <div>
+                    <table>
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th style="width:240px;"></th>
+                                <th style="width:177px;"></th>
+                                <th style="width:330px;"></th>
+                                <th style="width:40px; "></th>
+                                <th style="width:263px;"></th>
+                                <th style="width:180px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;"><a style="color: red;text-decoration: none;" href="{% url 'view_order' i.id %}">{{i.order_number}}</a></td>
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.first_name}}</td>
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.created_at}}</td>
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.order_total}}</td>
+                            {% if i.status == "Pending" %}
+                            <td style="color:orange;text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.status}}</td>
+                            {% elif i.status == "Confirmed" %}
+                            <td style="color:rgb(6, 150, 6);text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.status}}</td>
+                            {% elif i.status == "Shipped" %}
+                            <td style="color:rgb(7, 111, 247);text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.status}}</td>
+                            {% else %}
+                            <td style="color:rgb(8, 247, 8);text-align: center;padding-top: 1%;padding-bottom: 2%;">{{i.status}}</td>
+                            {% endif %}
+                            {% if i.status == "Shipped" or i.status == "Delivered" %}
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;"><button class="btn disabled">Cancel Order</button></td>
+                            {% else %}
+                            <td style="text-align: center;padding-top: 1%;padding-bottom: 2%;"><a href="{% url 'cancel_order' i.id %}"><button class="btn btn-danger">Cancel Order</button></a></td>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

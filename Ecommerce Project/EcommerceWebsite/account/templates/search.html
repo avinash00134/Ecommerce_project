@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Order Confirmation
+{% endblock %}
+{% block cart %}
+0
+{% endblock %}  
+{% block content %}
+<br>
+<div class="row">
+    <div class="col-12 col-8 mx-auto">
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width:250px;text-align: center;">Product</th>
+                <th style="width:250px;text-align: center;">Product Name</th>
+                <th style="width:270px;text-align: center;">Seller</th>
+                <th style="width:270px;text-align: center;">Price</th>
+                <th style="width:270px;text-align: center;">Quantity</th>
+            </tr>
+        </thead>
+        {% for i in product_list %}
+        <tbody>
+            <td><a href="{% url 'view_product_detail' i.id%}"><img style="padding: 10%;" src="{{i.image.url}}" height="200px" width="200px" alt="Category Title"></a></td>
+            <td style="text-align: center;padding-top: 7%;">{{i.name}}</td>
+            <td style="text-align: center;padding-top: 7%;">
+                <span style="color: red;">{{i.user}}</span>
+            </td>
+            <td style="text-align: center;padding-top: 7%;">{{i.price}}</td>
+            <td style="text-align: center;padding-top: 7%;">{{i.stock}}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+
+{% endblock %}

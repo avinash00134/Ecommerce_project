@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Product Add {% endblock %}
+{% block cart %}
+0
+{% endblock %}
+{% block content %}
+    {% if user.is_seller %}
+    <div class="container my-4" >
+        <h3 class="my-4">Product Added</h3>
+        <form method="POST" action="" enctype = "multipart/form-data">
+            <table class="table table-bordered">
+                {% csrf_token %}
+                {{form.as_table}}
+                <tr>
+                    <td colspan="2"><input type="submit" value="Submit" class="btn btn-primary"/></td>
+                </tr>
+            </table>
+        </form>
+        <h5 class="card-title" style="text-align: right;"><a href="{% url 'add_product_csv' %}"  class="btn btn-success">Add Product CSV</a></h5>
+    </div>
+    {% endif %}
+{% endblock %}

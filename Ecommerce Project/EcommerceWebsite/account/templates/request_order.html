@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Pending Orders{% endblock %}
+{% block cart %}
+0
+{% endblock %}
+{% block content %}
+    {% if user.is_seller %}
+    <table style="text-align: center;background-color:rgb(247, 246, 242);" class="table table-bordered">
+        <thead style="text-align: center;"> 
+            <tr>
+                <td><b> Order No</b></td>
+                <td><b> User</b></td>
+                <td><b> Created</b></td>
+                <td><b> Total</b></td>
+                <td><b> Status</b></td>
+                <td colspan="4"><b> Operation</b></td>
+            </tr>
+        </thead>
+        {% for i in order_details %}
+        <tbody>
+            <tr>
+                <td>{{i.order_number}}</td>
+                <td>{{i.user}}</td>
+                <td>{{i.created_at}}</td>
+                <td>{{i.order_total}}</td>
+                <td>{{i.status}}</td>
+                <td colspan="2"><a href="{% url 'edit_order' i.id  %}"><button class="btn btn-primary">Edit</button></a></td>
+                <td colspan="2"><a href="{% url 'delete_order' i.id  %}"><button class="btn btn-danger">Delete</button></a></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+        <br><br>
+    </table>
+    {% endif %}
+{% endblock %}

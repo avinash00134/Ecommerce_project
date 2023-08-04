@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Checkout
+{% endblock %}
+{% block cart %}
+{{carts.count}}
+{% endblock %}  
+{% block content %}
+{% for j in order %}
+<h1 style="text-align: center;margin-top: 1%;">Your Order: {{j.order_number}}</h1>
+
+<div style="border: solid 2px rgb(230, 148, 25);border-radius: 10%;margin-left: 10%;margin-bottom:3%;margin-top: 2%;width: 80%;" id = card>         
+    <div class="card">
+        <div class="card-header">
+            Order Details
+        </div>   
+        <div class="card-body">
+            <div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="border: solid 1px black;text-align: center;">Product</th>
+                            <th style="border: solid 1px black;text-align: center;">Product Name</th>
+                            <th style="border: solid 1px black;text-align: center;">Quantity</th>
+                            <th style="border: solid 1px black;text-align: center;">Price</th>
+                            <th style="border: solid 1px black;text-align: center;">Total</th>
+                        </tr>
+                    </thead>
+                    {% for i in order_item %}
+                    <tbody>
+                        <td style="border: solid 1px black;"><a href="#"><img style="padding: 10%;margin-left: 20%;" src="{{i.product.image.url}}" height="200px" width="200px" alt="Category Title"></a></td>
+                        <td style="border: solid 1px black;text-align: center;padding-top: 7%;">{{i.product.name}}</td>
+                        <td style="border: solid 1px black;text-align: center;padding-top: 7%;">{{i.quantity}}</td>
+                        <td style="border: solid 1px black;text-align: center;padding-top: 7%;">${{i.price}}</td>
+                        <td style="border: solid 1px black;text-align: center;padding-top: 7%;">${{i.total}}</td>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        <h5 class="card-title">Product Details</h5>
+        <hr style="border:solid 1px black">
+        <h6 style="margin-right: 12.5%;" class="card-subtitle mb-2 text-muted">Price <b>({{order_item.count}} items)</b> <span style="float:right">${{j.order_total}}</span></h6> 
+        <h6 style="margin-right: 13.4%;margin-top: 1%;" class="card-subtitle mb-2 text-muted">Delivery Charges <span style="color:rgb(21, 226, 21);float:right">Free</span></h6> 
+        <hr style="border:solid 1px black;">
+        <h6 style="font-weight: bold;" class="card-subtitle mb-2">Total Price <span style="float:right;margin-right: 7.2%;">${{j.order_total}}<img src="{% static 'paid.png' %}" width="50px" height="47px"></span></h6>
+        <br><br>
+        <h5 class="card-title">Delivery Details:</h5>
+        <hr style="border:solid 1px black">
+        <div style="margin-left: 5%;float: left;width: 450px;">
+            <h5><b>Name:</b><span style="margin-left: 25%;">{{j.first_name}} {{j.last_name}}</span></h5>
+            <h5><b>Address:</b><span style="margin-left: 1%;">{{j.address}}</span></h5>
+            <h5><b>Mobile Number:</b>  <span style="margin-left: 5%;">{{j.mobilenumber}}</span></h5>
+            <h5><b>Country:</b><span style="margin-left: 23.3%;">{{j.country}}</h5>
+            <h5><b>State:</b><span style="margin-left: 26.3%;">{{j.state}}</span></h5>
+            <h5><b>City:</b><span style="margin-left: 27.3%;">{{j.city}}</span></h5>
+            <h5><b>Pincode:</b><span style="margin-left: 24.3%;">{{j.pincode}}</span></h5>
+
+        </div>
+        <div style="float: right;margin-right: -10px;width: 400px;">
+            <h5><b>Order ID No:</b>  {{j.order_number}}</h5>
+            {% if j.status == "Pending" %}
+            <h5><b>Order Status: </b><span style="color:orange;">{{j.status}}</span></h5>
+            {% elif j.status == "Confirmed" %}
+            <h5><b>Order Status: </b><span style="color:rgb(6, 150, 6);">{{j.status}}</span></h5>
+            {% elif j.status == "Shipped" %}
+            <h5><b>Order Status: </b><span style="color:rgb(7, 111, 247);">{{j.status}}</span></h5>
+            {% else %}
+            <h5><b>Order Status: </b><span style="color:rgb(8, 247, 8);">{{j.status}}</span></h5>
+            {% endif %}
+            <h5><b>Order Date:</b> {{j.created_at}}</h5>
+            {% if j.status == "Pending" %}
+            <h5><b>Order: </b><span style="color:rgb(29, 28, 27);">Your Order has Pending</span></h5>
+            {% elif j.status == "Confirmed" %}
+            <h5><b>Order: </b><span style="color:    rgb(42, 43, 42);">Your Order Has Confirmed</span></h5>
+            {% elif j.status == "Shipped" %}
+            <h5><b>Order: </b><span style="color:rgb(35, 36, 37);">Your Order Has Shipped</span></h5>
+            {% else %}
+            <h5><b>Order: </b><span style="color:rgb(24, 26, 24);">Your Order Has Delivered</span></h5>
+            {% endif %}
+            {% if j.status == "Delivered" %}
+            <h5><b>Order Delivered:</b> {{j.updated_at}}</h5>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+{% if j.status == "Delivered" %}
+<div style="text-align: center;margin-bottom: 1%;" class="container my-4" >
+    <a href="{% url 'pdfdownload' j.id %}"  class="btn btn-primary">Download</a>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Product Add {% endblock %}
+{% block cart %}
+0
+{% endblock %}
+{% block content %}
+    {% if user.is_seller %}
+    <table style="text-align: center;background-color:rgb(247, 246, 242);" class="table table-bordered">
+        <thead style="text-align: center;"> 
+            <tr>
+                <td><b> Product ID</b></td>
+                <td><b> Product Category</b></td>
+                <td><b> Product Name</b></td>
+                <td><b> Product Price</b></td>
+                <td><b> Product Quantity</b></td>
+                <td colspan="4"><b> Operation</b></td>
+            </tr>
+        </thead>
+        {% for product in products %}
+        <tbody">
+            <tr>
+                <td>{{product.id}}</td>
+                <td>{{product.category}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.stock}}</td>
+                <td colspan="2"><a href="{% url 'edit_product' product.id  %}"><button class="btn btn-primary">Edit</button></a></td>
+                <td colspan="2"><a href="{% url 'delete_product' product.id  %}"><button class="btn btn-danger">Delete</button></a></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+        <br><br>
+    </table>
+    {% endif %}
+{% endblock %}
